@@ -26,7 +26,7 @@ class Cancion(models.Model):
 
 
 class Tablatura(models.Model):
-    cancion = models.ForeignKey(Cancion, related_name='tablaturas', on_delete=models.CASCADE)
+    cancion = models.ForeignKey(Cancion, related_name='tablaturas', on_delete=models.CASCADE, verbose_name="Canción")
     archivo = models.FileField(upload_to='tablaturas/', verbose_name="Archivo de tablatura")
 
     def __str__(self):

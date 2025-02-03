@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+{{ cancion.titulo }}
+{{ cancion.nombre_banda }}
+{{ cancion.genero }}
+
+<div>
+    <canvas id="pdf-canvas"></canvas>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+{% for tab in tablaturas %}
+        <h2>PDF {{ forloop.counter }}</h2>
+        <canvas id="pdf-canvas-{{ forloop.counter }}"></canvas>
+
+        <script>
+            var url = "{{ tab.archivo.url }}";  // URL del PDF
+
+            pdfjsLib.getDocument(url).promise.then(function(pdf) {
+                pdf.getPage(1).then(function(page) {
+                    var scale = 1.5;
+                    var viewport = page.getViewport({ scale: scale });
+
+                    var canvas = document.getElementById('pdf-canvas-{{ forloop.counter }}');
+                    var context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    var renderContext = { canvasContext: context, viewport: viewport };
+                    page.render(renderContext);
+                });
+            });
+        </script>
+    {% endfor %}
+
+<script>
+    var url = "{{ cancion.letra.url }}";
+
+    var loadingTask = pdfjsLib.getDocument(url);
+    loadingTask.promise.then(function(pdf) {
+        pdf.getPage(1).then(function(page) {
+            var scale = 1.5;
+            var viewport = page.getViewport({ scale: scale });
+
+            var canvas = document.getElementById("pdf-canvas");
+            var context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            var renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+            page.render(renderContext);
+        });
+    });
+</script>
+
+</body>
+</html>

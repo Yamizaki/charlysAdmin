@@ -1,0 +1,27 @@
+{% extends "canciones/base.html" %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+  <div class="d-flex flex-wrap gap-4">
+    <!-- Iterar sobre las canciones -->
+    {% for cancion in canciones %}
+    <a class="flex-grow-1" href={% url 'cancion-detalle' cancion.id %} style="text-decoration: none;">
+      <div class="mb-4 ">
+        <div class="card">
+          <div class="card-body">
+            <!-- Título de la canción -->
+            <h5 class="card-title">{{ cancion.titulo }}</h5>
+            
+            <!-- Badge para el nombre de la banda -->
+            <span class="badge bg-primary">{{ cancion.nombre_banda }}</span>
+            
+            <!-- Badge para el género musical -->
+            <span class="badge bg-success">{{ cancion.get_genero_display }}</span>
+          </div>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+{% endblock content %}
